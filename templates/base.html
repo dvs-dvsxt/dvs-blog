@@ -1,0 +1,115 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DVS的博客{% endblock %}</title>
+    <link rel="stylesheet" href="/css.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body data-theme="light" class="repo-bg-gray">
+    <!-- 主题切换 -->
+    <div class="repo-fixed" style="top: 16px; right: 16px; z-index: 1060;">
+        <div class="repo-dropdown" id="themeDropdown">
+            <button class="repo-btn repo-btn--secondary repo-btn--icon" id="themeToggle" title="切换主题">
+                <i class="fas fa-sun" id="themeIcon"></i>
+            </button>
+            <div class="repo-dropdown__menu" id="themeMenu" style="right: 0; left: auto;">
+                <button class="repo-dropdown__item" onclick="setTheme('light')">
+                    <i class="fas fa-sun repo-mr-2" style="width:16px;"></i> 浅色模式
+                </button>
+                <button class="repo-dropdown__item" onclick="setTheme('dark')">
+                    <i class="fas fa-moon repo-mr-2" style="width:16px;"></i> 深色模式
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script>
+        // 主题切换
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('blog-theme', theme);
+            const icon = document.getElementById('themeIcon');
+            icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // 页面加载时恢复保存的主题
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('blog-theme') || 'light';
+            setTheme(savedTheme);
+        });
+
+        // 下拉菜单控制
+        document.getElementById('themeToggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('themeDropdown').classList.toggle('repo-dropdown--open');
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('themeDropdown').classList.remove('repo-dropdown--open');
+        });
+
+        document.getElementById('themeMenu').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // 键盘快捷键：Ctrl+T 切换主题
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 't') {
+                e.preventDefault();
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                setTheme(current === 'dark' ? 'light' : 'dark');
+            }
+        });
+
+        // Toast消息
+        function showToast(message, type) {
+            var existing = document.querySelector('.custom-toast');
+            if (existing) existing.remove();
+
+            var toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:1050;padding:12px 24px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);color:#fff;transition:all 0.3s ease;';
+
+            var colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                info: '#3b82f6',
+                warning: '#f59e0b'
+            };
+            toast.style.background = colors[type] || colors.info;
+
+            var icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            toast.innerHTML = '<div class="repo-flex repo-items-center repo-gap-2"><i class="fas ' + (icons[type] || icons.info) + '"></i><span>' + message + '</span></div>';
+            document.body.appendChild(toast);
+
+            setTimeout(function() {
+                toast.style.opacity = '0';
+                setTimeout(function() { if (toast.parentNode) toast.remove(); }, 300);
+            }, 2000);
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('已复制到剪贴板', 'success');
+            }).catch(function() {
+                showToast('复制失败', 'error');
+            });
+        }
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
