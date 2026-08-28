@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Blog data
+docs/
+uploads/
+articles.json
+*.md
+
+# System files
+Thumbs.db
+.DS_Store
+desktop.ini
