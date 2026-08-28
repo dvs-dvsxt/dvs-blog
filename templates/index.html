@@ -1,0 +1,171 @@
+<!-- index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="repo-container repo-py-6">
+    <!-- 头部 -->
+    <div class="repo-card repo-mb-6">
+        <div class="repo-card__body">
+            <div class="repo-text-center repo-mb-6">
+                <h1 class="repo-text-xl repo-font-bold repo-mb-2">DVS——博客</h1>
+                <p class="repo-text-secondary">记录技术与生活，分享知识与感悟</p>
+            </div>
+
+            <!-- 作者信息 -->
+            <div class="repo-card repo-mb-4">
+                <div class="repo-card__body">
+                    <h2 class="repo-card__title repo-mb-4">关于作者</h2>
+                    <div class="repo-row">
+                        <div class="repo-col">
+                            <p class="repo-mb-2"><strong>开发者：</strong>Dvs</p>
+                            <p class="repo-mb-2">
+                                <strong>主页：</strong>
+                                <a href="https://dvsyun.top/me/dvs">https://dvsyun.top/me/dvs</a>
+                            </p>
+                            <p>
+                                <strong>EMAIL：</strong>
+                                me@dvsyun.top dvs6666@163.com
+                            </p>
+                        </div>
+                        <div class="repo-col repo-flex repo-items-center repo-justify-end">
+                            <a href="/admin" class="repo-btn repo-btn--primary">
+                                <i class="fas fa-lock"></i> 管理员登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 项目展示 -->
+            <div class="repo-row">
+                <div class="repo-col">
+                    <div class="repo-card">
+                        <div class="repo-card__body">
+                            <h3 class="repo-font-semibold repo-mb-3">ap_ds音频库</h3>
+                            <span class="repo-tag repo-tag--primary repo-mb-2">v2.4.1</span>
+                            <div class="repo-flex repo-flex-col repo-gap-2 repo-mt-2">
+                                <a href="https://www.dvsyun.top/ap_ds" target="_blank" class="repo-text-link">
+                                    <i class="fas fa-globe repo-mr-2"></i>官方网站1
+                                </a>
+                                <a href="https://www.apds.top" target="_blank" class="repo-text-link">
+                                    <i class="fas fa-globe repo-mr-2"></i>官方网站2
+                                </a>
+                                <a href="https://pypi.org/project/ap_ds/" target="_blank" class="repo-text-link">
+                                    <i class="fab fa-python repo-mr-2"></i>PyPI页面
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文章列表 -->
+    <div class="repo-card">
+        <div class="repo-card__header">
+            <div class="repo-flex repo-items-center repo-justify-between">
+                <h2 class="repo-card__title">最新文章</h2>
+                <div class="repo-flex repo-gap-2">
+                    <button onclick="changeView('grid')" class="repo-btn repo-btn--ghost repo-btn--sm" id="gridBtn">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button onclick="changeView('list')" class="repo-btn repo-btn--ghost repo-btn--sm" id="listBtn">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="repo-card__body">
+            {% if articles %}
+            <div id="articlesGrid" class="repo-row" style="margin: -8px;">
+                {% for article in articles %}
+                <div class="repo-col" style="padding: 8px; flex: 0 0 33.333%; max-width: 33.333%;">
+                    <div class="repo-card" style="height: 100%;">
+                        <div class="repo-card__body">
+                            <h3 class="repo-font-semibold repo-mb-3">{{ article.title }}</h3>
+                            <div class="repo-text-sm repo-text-secondary repo-mb-4">
+                                <div class="repo-flex repo-items-center repo-gap-3">
+                                    <span><i class="far fa-user repo-mr-1"></i>{{ article.author }}</span>
+                                    <span><i class="far fa-clock repo-mr-1"></i>{{ article.created_at }}</span>
+                                </div>
+                            </div>
+                            <div class="repo-flex repo-items-center repo-justify-between">
+                                <a href="/docs/{{ article.filename }}" class="repo-btn repo-btn--primary repo-btn--sm">
+                                    阅读文章
+                                </a>
+                                <span class="repo-text-xs repo-text-tertiary">{{ loop.index }} / {{ articles|length }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div id="articlesList" class="repo-hidden" style="display: none;">
+                {% for article in articles %}
+                <div class="repo-card repo-mb-3">
+                    <div class="repo-card__body">
+                        <div class="repo-flex repo-items-center repo-justify-between">
+                            <div>
+                                <h3 class="repo-font-semibold repo-mb-2">{{ article.title }}</h3>
+                                <div class="repo-text-sm repo-text-secondary">
+                                    <span class="repo-mr-3"><i class="far fa-user repo-mr-1"></i>{{ article.author }}</span>
+                                    <span><i class="far fa-clock repo-mr-1"></i>{{ article.created_at }}</span>
+                                </div>
+                            </div>
+                            <a href="/docs/{{ article.filename }}" class="repo-btn repo-btn--primary repo-btn--sm">
+                                阅读全文
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="repo-text-center repo-py-8">
+                <div class="repo-text-tertiary repo-text-2xl repo-mb-4">
+                    <i class="far fa-file-alt"></i>
+                </div>
+                <h3 class="repo-font-semibold repo-mb-2">暂无文章</h3>
+                <p class="repo-text-secondary">管理员登录后可发布新文章</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="repo-text-center repo-mt-6">
+        <p class="repo-text-sm repo-text-tertiary">© 2026 DVS的博客 | Powered by Flask</p>
+    </div>
+</div>
+
+<script>
+    function changeView(view) {
+        var grid = document.getElementById('articlesGrid');
+        var list = document.getElementById('articlesList');
+        var gridBtn = document.getElementById('gridBtn');
+        var listBtn = document.getElementById('listBtn');
+
+        if (view === 'grid') {
+            grid.style.display = '';
+            list.style.display = 'none';
+            gridBtn.classList.add('repo-btn--primary');
+            gridBtn.classList.remove('repo-btn--ghost');
+            listBtn.classList.remove('repo-btn--primary');
+            listBtn.classList.add('repo-btn--ghost');
+        } else {
+            grid.style.display = 'none';
+            list.style.display = '';
+            listBtn.classList.add('repo-btn--primary');
+            listBtn.classList.remove('repo-btn--ghost');
+            gridBtn.classList.remove('repo-btn--primary');
+            gridBtn.classList.add('repo-btn--ghost');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        changeView('grid');
+    });
+</script>
+{% endblock %}
